@@ -1,61 +1,28 @@
-// Includes the Servo library
-#include <Servo.h>
-// Defines Tirg and Echo pins of the Ultrasonic Sensor
-const int TRIG_PIN = 12;
-const int ECHO_PIN = 13;
-
-// Variables for the duration and the distance
-long duration;
-int distance;
-Servo myServo; // Creates a servo object for controlling the servo motor
+// —————————————————————————
+// Example NewPing library sketch that does a ping about 20 times per second.
+// —————————————————————————
+#include <NewPing.h>
+#define TRIGGER_PIN 12 // Arduino pin tied to trigger pin on the ultrasonic sensor.
+#define ECHO_PIN 13 // Arduino pin tied to echo pin on the ultrasonic sensor.
+#define MAX_DISTANCE 600 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400 - 500cm.
+NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 void setup() {
-  pinMode(TRIG_PIN, OUTPUT);
-  pinMode(ECHO_PIN, INPUT);
-  Serial.begin(9600);
-  myServo.attach(9); // Defines on which pin is the servo motor attached
+  Serial.begin(115200); // Open serial monitor at 115200 baud to see ping results.
+  while (Serial.available()) {
+    int temp = Serial.read();
+  }
 }
 void loop() {
-  // rotates the servo motor from 15 to 165 degrees
-  for (int i = 15; i <= 165; i++) {
-    myServo.write(i);
-    delay(30);
-    distance = calculateDistance();// Calls a function for calculating the distance measured by the Ultrasonic sensor for each degree
-
-    Serial.print(i); // Sends the current degree into the Serial Port
-    Serial.print(","); // Sends addition character right next to the previous value needed later in the Processing IDE for indexing
-    Serial.print(distance); // Sends the distance value into the Serial Port
-    Serial.print("."); // Sends addition character right next to the previous value needed later in the Processing IDE for indexing
+  if (Serial.available()) {
+    int temp = Serial.read();
+    // *** Replace these lines with your sensor reading code
+    // I used a ping sensor to measure distance
+    unsigned int uS = sonar.ping(); // Send ping, get ping time in microseconds (uS).
+    int value = uS / US_ROUNDTRIP_CM; // convert from time to distance
+    // try looking at a floating analog input
+    //int value = analogRead(A1); // touch the A1 pin and you will see the value change
+    // *** end of sensor reading code (make sure you store as an integer called value)
+    Serial.write(value / 256);
+    Serial.write(value % 256);
   }
-  // Repeats the previous lines from 165 to 15 degrees
-  for (int i = 165; i > 15; i--) {
-    myServo.write(i);
-    delay(30);
-    distance = calculateDistance();
-    Serial.print(i);
-    Serial.print(",");
-    Serial.print(distance);
-    Serial.print(".");
-  }
-}
-
-/*Ultrasonic distance measurement Sub function*/
-int calculateDistance()
-{
-  long durata, distanza;
-
-  // Dare un corto segnale basso per poi dare un segnale alto puro:
-  digitalWrite(TRIG_PIN, LOW);
-  delayMicroseconds(2);
-  digitalWrite(TRIG_PIN, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(TRIG_PIN, LOW);
-  durata = pulseIn(ECHO_PIN, HIGH);
-
-  // Converti il tempo in distanza:
-  distanza = durata / 29.1 / 2 ;
-
-  if (distanza <= 0) {
-    Serial.println("Out of range");
-  }
-  return (int)distanza;
 }
