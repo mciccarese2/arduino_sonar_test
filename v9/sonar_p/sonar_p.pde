@@ -28,7 +28,7 @@ void setup(){
   myFont = createFont("verdana", 12);
   textFont(myFont);
   // setup the serial port and buffer
-  myPort = new Serial(this, Serial.list()[1], 9600);
+  myPort = new Serial(this, "COM3", 9600);
   myPort.bufferUntil('\n');
 }
  
