@@ -5,8 +5,8 @@
 #include <NewPing.h>
 #include <Servo.h>
 
-#define TRIGGER_PIN 12 // Arduino pin tied to trigger pin on the ultrasonic sensor.
-#define ECHO_PIN 13 // Arduino pin tied to echo pin on the ultrasonic sensor.
+#define TRIGGER_PIN A8 // Arduino pin tied to trigger pin on the ultrasonic sensor.
+#define ECHO_PIN A7 // Arduino pin tied to echo pin on the ultrasonic sensor.
 #define MAX_DISTANCE 300 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
@@ -21,6 +21,10 @@ void setup() {
 }
 
 void loop() {
+  unsigned int uS = sonar.ping(); // Send ping, get ping time in microseconds (uS).
+  int value = uS / US_ROUNDTRIP_CM; // convert from time to distance
+Serial.write(">>" + value);
+  
   if (Serial.available()) {
     int temp = Serial.read();
     // *** Replace these lines with your sensor reading code
@@ -36,7 +40,7 @@ void loop() {
     // Serial.write(value / 256);
     // Serial.write(value % 256);
 
-    for (int i = 15; i <= 165; i++) {
+    for (int i = 1; i <= 165; i++) {
       myServo.write(i);
       delay(30);
       uS = sonar.ping(); // Send ping, get ping time in microseconds (uS).

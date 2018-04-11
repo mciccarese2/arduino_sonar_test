@@ -4,9 +4,9 @@
 
 Servo serv;
 
-int trig = 13;
+int trig = A9;
 
-int echo = 11;
+int echo = A8;
 
 Ultrasonic utr(trig, echo);
 float pingTime;

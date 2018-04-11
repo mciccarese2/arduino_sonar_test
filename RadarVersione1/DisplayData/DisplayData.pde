@@ -18,7 +18,7 @@ void setup() {
   size (900, 450);
   // set up serial connection
   String portName = Serial.list()[0];
-  myPort = new Serial(this, portName, 115200);
+  myPort = new Serial(this, "COM7", 115200);
   // initialise graph points object
   GPointsArray points1 = new GPointsArray(points);
   // calculate initial display points

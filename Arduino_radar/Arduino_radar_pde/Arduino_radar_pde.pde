@@ -26,7 +26,7 @@ void setup() {
 
   size (1920, 1080); // ***CHANGE THIS TO YOUR SCREEN RESOLUTION***
   smooth();
-  myPort = new Serial(this, "COM3", 9600); // starts the serial communication
+  myPort = new Serial(this, "COM7", 9600); // starts the serial communication
   myPort.bufferUntil('.'); // reads the data from the serial port up to the character '.'. So actually it reads this: angle,distance.
   // orcFont = loadFont("OCRAExtended-30.vlw");
 }
